@@ -74,7 +74,10 @@
           <h5 class="modal-title">Fragman</h5>
           <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
         </div>
+        <button onclick="openFullscreen()">Tam Ekran</button>
+
         <div class="modal-body" id="trailerModalContent">
+          
         </div>
       </div>
     </div>
@@ -136,6 +139,20 @@
     console.error("Filmler yüklenirken hata oluştu:", error);
   }
 }
+
+function openFullscreen() {
+  const iframe = document.querySelector("#trailerModal iframe");
+  if (iframe.requestFullscreen) {
+    iframe.requestFullscreen();
+  } else if (iframe.mozRequestFullScreen) {
+    iframe.mozRequestFullScreen();
+  } else if (iframe.webkitRequestFullscreen) {
+    iframe.webkitRequestFullscreen();
+  } else if (iframe.msRequestFullscreen) {
+    iframe.msRequestFullscreen();
+  }
+}
+
     function showSpinner() {
       const filmCardsContainer = document.getElementById('filmCards');
       filmCardsContainer.innerHTML = `
