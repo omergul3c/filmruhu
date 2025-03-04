@@ -255,6 +255,7 @@
         });
       modal.show();
     }
+   
     function openTrailerModalTR(movieId) {
       const modal = new bootstrap.Modal(document.getElementById('trailerModal'));
       const trailerContainer = document.getElementById('trailerModalContent');
@@ -286,6 +287,31 @@
         });
       modal.show();
     }
+      function closeTrailerModal() {
+    const trailerContainer = document.getElementById('trailerModalContent');
+    trailerContainer.innerHTML = ""; // Videoyu tamamen temizleyerek durduruyoruz
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    const trailerModal = document.getElementById("trailerModal");
+
+    trailerModal.addEventListener("hidden.bs.modal", () => {
+      closeTrailerModal(); // Modal kapandığında video duracak
+    });
+    document.addEventListener("click", (event) => {
+      if (trailerModal.classList.contains("show") && !event.target.closest(".modal-content")) {
+        const modalInstance = bootstrap.Modal.getInstance(trailerModal);
+        modalInstance.hide();
+      }
+    });
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && trailerModal.classList.contains("show")) {
+        const modalInstance = bootstrap.Modal.getInstance(trailerModal);
+        modalInstance.hide();
+      }
+    });
+  });
+
+    
     fetchMovies();
   </script>
 <footer class="footer bg-dark text-light py-3">
