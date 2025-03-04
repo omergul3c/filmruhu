@@ -225,68 +225,78 @@
       renderFilm();
     }
     function openTrailerModal(movieId) {
-      const modal = new bootstrap.Modal(document.getElementById('trailerModal'));
-      const trailerContainer = document.getElementById('trailerModalContent');
-      trailerContainer.innerHTML = `
-        <div class="text-center">
-          <div class="spinner-border text-light" role="status">
-            <span class="visually-hidden">Yükleniyor...</span>
+  const modal = new bootstrap.Modal(document.getElementById('trailerModal'));
+  const trailerContainer = document.getElementById('trailerModalContent');
+
+  trailerContainer.innerHTML = `
+    <div class="text-center">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+      </div>
+    </div>`;
+
+  const videoUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}&language=en-US`;
+  
+  fetch(videoUrl)
+    .then(response => response.json())
+    .then(videoData => {
+      const trailers = videoData.results.filter(video => video.type === "Trailer" && video.site === "YouTube");
+      if (trailers.length > 0) {
+        const trailer = trailers[0];
+        trailerContainer.innerHTML = `
+          <div class="ratio ratio-16x9 mb-3">
+            <iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" title="Fragman" allow="autoplay; fullscreen" allowfullscreen></iframe>
           </div>
-        </div>`;
-      const videoUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}&language=en-US`;
-      fetch(videoUrl)
-        .then(response => response.json())
-        .then(videoData => {
-          const trailers = videoData.results.filter(video => video.type === "Trailer" && video.site === "YouTube");
-          if (trailers.length > 0) {
-            const trailer = trailers[0];
-            trailerContainer.innerHTML = `
-              <div class="ratio ratio-16x9 mb-3">
-                <iframe src="https://www.youtube.com/embed/${trailer.key}" title="Fragman" allowfullscreen></iframe>
-              </div>
-              <small class="d-block text-center text-muted">Platform: ${trailer.site}</small>
-            `;
-          } else {
-            trailerContainer.innerHTML = `<p class="text-center">Fragman bulunamadı.</p>`;
-          }
-        })
-        .catch(err => {
-          trailerContainer.innerHTML = `<p class="text-center">Fragman yüklenirken hata oluştu.</p>`;
-        });
-      modal.show();
-    }
+          <small class="d-block text-center text-muted">Platform: ${trailer.site}</small>
+        `;
+      } else {
+        trailerContainer.innerHTML = `<p class="text-center">Fragman bulunamadı.</p>`;
+      }
+    })
+    .catch(err => {
+      trailerContainer.innerHTML = `<p class="text-center">Fragman yüklenirken hata oluştu.</p>`;
+    });
+
+  modal.show();
+}
+
    
-    function openTrailerModalTR(movieId) {
-      const modal = new bootstrap.Modal(document.getElementById('trailerModal'));
-      const trailerContainer = document.getElementById('trailerModalContent');
-      trailerContainer.innerHTML = `
-        <div class="text-center">
-          <div class="spinner-border text-light" role="status">
-            <span class="visually-hidden">Yükleniyor...</span>
+function openTrailerModalTR(movieId) {
+  const modal = new bootstrap.Modal(document.getElementById('trailerModal'));
+  const trailerContainer = document.getElementById('trailerModalContent');
+
+  trailerContainer.innerHTML = `
+    <div class="text-center">
+      <div class="spinner-border text-light" role="status">
+        <span class="visually-hidden">Yükleniyor...</span>
+      </div>
+    </div>`;
+
+  const videoUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}&language=tr-TR`;
+  
+  fetch(videoUrl)
+    .then(response => response.json())
+    .then(videoData => {
+      const trailers = videoData.results.filter(video => video.type === "Trailer" && video.site === "YouTube");
+      if (trailers.length > 0) {
+        const trailer = trailers[0];
+        trailerContainer.innerHTML = `
+          <div class="ratio ratio-16x9 mb-3">
+            <iframe src="https://www.youtube.com/embed/${trailer.key}?autoplay=1" title="Fragman" allow="autoplay; fullscreen" allowfullscreen></iframe>
           </div>
-        </div>`;
-      const videoUrl = `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=${apiKey}&language=tr-TR`;
-      fetch(videoUrl)
-        .then(response => response.json())
-        .then(videoData => {
-          const trailers = videoData.results.filter(video => video.type === "Trailer" && video.site === "YouTube");
-          if (trailers.length > 0) {
-            const trailer = trailers[0];
-            trailerContainer.innerHTML = `
-              <div class="ratio ratio-16x9 mb-3">
-                <iframe src="https://www.youtube.com/embed/${trailer.key}" title="Fragman" allowfullscreen></iframe>
-              </div>
-              <small class="d-block text-center text-muted">Platform: ${trailer.site}</small>
-            `;
-          } else {
-            trailerContainer.innerHTML = `<p class="text-center">Fragman bulunamadı.</p>`;
-          }
-        })
-        .catch(err => {
-          trailerContainer.innerHTML = `<p class="text-center">Fragman yüklenirken hata oluştu.</p>`;
-        });
-      modal.show();
-    }
+          <small class="d-block text-center text-muted">Platform: ${trailer.site}</small>
+        `;
+      } else {
+        trailerContainer.innerHTML = `<p class="text-center">Fragman bulunamadı.</p>`;
+      }
+    })
+    .catch(err => {
+      trailerContainer.innerHTML = `<p class="text-center">Fragman yüklenirken hata oluştu.</p>`;
+    });
+
+  modal.show();
+}
+
       function closeTrailerModal() {
     const trailerContainer = document.getElementById('trailerModalContent');
     trailerContainer.innerHTML = ""; // Videoyu tamamen temizleyerek durduruyoruz
@@ -309,9 +319,7 @@
         modalInstance.hide();
       }
     });
-  });
-
-    
+  });  
     fetchMovies();
   </script>
 <footer class="footer bg-dark text-light py-3">
